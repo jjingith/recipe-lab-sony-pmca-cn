@@ -25,22 +25,22 @@ if [ -n "${JAVA_HOME:-}" ]; then JAVA="$JAVA_HOME/bin"; else JAVA="$(dirname "$(
 # reaches for android.* fails right here. New camera-free logic goes into one of these (or a new file listed here)
 # with a test next to it; MainActivity and the views stay out because they cannot run off the camera.
 UNITS=(
-  src/com/voxivoid/recipelab/Recipes.java
-  src/com/voxivoid/recipelab/Params.java
-  src/com/voxivoid/recipelab/Favourites.java
-  src/com/voxivoid/recipelab/CustomRecipes.java
-  src/com/voxivoid/recipelab/RecipeFormat.java
-  src/com/voxivoid/recipelab/RecipeFormats.java
-  src/com/voxivoid/recipelab/RecipeFormatV1.java
-  src/com/voxivoid/recipelab/Library.java
-  src/com/voxivoid/recipelab/NameEntry.java
-  src/com/voxivoid/recipelab/DevTools.java
-  src/com/voxivoid/recipelab/Keys.java
-  src/com/voxivoid/recipelab/KeyProbe.java
-  src/com/voxivoid/recipelab/Lang.java
-  src/com/voxivoid/recipelab/TextEn.java
-  src/com/voxivoid/recipelab/TextZhHans.java
-  src/com/voxivoid/recipelab/TextZhHant.java
+  src/com/lutlab/pmca/Recipes.java
+  src/com/lutlab/pmca/Params.java
+  src/com/lutlab/pmca/Favourites.java
+  src/com/lutlab/pmca/CustomRecipes.java
+  src/com/lutlab/pmca/RecipeFormat.java
+  src/com/lutlab/pmca/RecipeFormats.java
+  src/com/lutlab/pmca/RecipeFormatV1.java
+  src/com/lutlab/pmca/Library.java
+  src/com/lutlab/pmca/NameEntry.java
+  src/com/lutlab/pmca/DevTools.java
+  src/com/lutlab/pmca/Keys.java
+  src/com/lutlab/pmca/KeyProbe.java
+  src/com/lutlab/pmca/Lang.java
+  src/com/lutlab/pmca/TextEn.java
+  src/com/lutlab/pmca/TextZhHans.java
+  src/com/lutlab/pmca/TextZhHant.java
 )
 
 mkdir -p out/test

@@ -3,6 +3,7 @@ node_modules/
 .claude/worktrees/
 *.apk
 *.apk.sha256
+*.log
 dev-notes.md
 debug.keystore
 *.keystore

@@ -51,7 +51,7 @@ if [ "$FAIL" -eq 0 ] && [ -n "$LAST_TAG" ]; then
 fi
 
 # A bare X.Y.Z anywhere in these files means someone reintroduced a mirror.
-for f in README.md src/com/voxivoid/recipelab/MainActivity.java; do
+for f in README.md src/com/lutlab/pmca/MainActivity.java; do
   if grep -nE '(Version|Recipe Lab) [0-9]+\.[0-9]+\.[0-9]+' "$f" >/dev/null 2>&1; then
     echo "FAIL: hard-coded version string in $f — the manifest is the only source of truth:" >&2
     grep -nE '(Version|Recipe Lab) [0-9]+\.[0-9]+\.[0-9]+' "$f" >&2

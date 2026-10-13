@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-"""Rebuild the two CJK fonts the APK bundles, from the text tables that use them.
+"""Rebuild the three fonts the APK bundles, from the text tables that use them.
 
-The camera's firmware font has no Chinese glyphs, so the app carries its own: Noto Sans CJK SC and TC, cut down to
-the characters their tables (src/.../TextZhHans.java, TextZhHant.java) actually use, plus printable ASCII and the
-English table's characters, which still appear on a Chinese screen (recipe names, codes, error text). Run it after
-any change to a translation; LangTest fails a character a font lacks.
+The camera's firmware font has no Chinese glyphs, so the app carries its own: Droid Sans Fallback — the AOSP font
+Droid Sans pairs with, so a Chinese line sits in the same family as the camera's own UI — cut down to the characters
+their tables (src/.../TextZhHans.java, TextZhHant.java) actually use, plus printable ASCII and the English table's
+characters, which still appear on a Chinese screen (recipe names, codes, error text). One file per script, so each
+gets its own glyph forms. The English interface is drawn in Droid Sans Mono, the terminal face the green-screen look
+is written in, cut down the same way. Run it after any change to a translation; LangTest fails a character a font
+lacks.
 
-    python3 tools/subset-font.py              # sources are fetched once into out/font-source/ (about 16 MB each)
+    python3 tools/subset-font.py              # the sources are fetched once into out/font-source/
     python3 tools/subset-font.py --source-dir <dir>
 
-Needs fonttools (python3 -m pip install fonttools). The sources are pinned by commit and SHA-256, and are not committed.
-Adapted from the tool in PR #50 by Cysita.
+Needs fonttools (python3 -m pip install fonttools). The sources are pinned by tag and SHA-256, and are not committed.
 """
 
 from argparse import ArgumentParser
@@ -21,20 +23,27 @@ import re
 
 try:
     from fontTools import subset
-    from fontTools.varLib.instancer import instantiateVariableFont
 except ImportError as exc:
     raise SystemExit("fonttools is required: python3 -m pip install fonttools") from exc
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / "src" / "com" / "voxivoid" / "recipelab"
+SRC = ROOT / "src" / "com" / "lutlab" / "pmca"
 OUTPUT = ROOT / "assets" / "fonts"
-COMMIT = "f8d157532fbfaeda587e826d4cd5b21a49186f7c"   # notofonts/noto-cjk
+# AOSP's Droid Sans Fallback (Apache-2.0), the CJK companion of the camera's Droid Sans, and Droid Sans Mono, the
+# terminal face the English interface is drawn in. Both are pinned by tag and SHA-256.
+SOURCES = {
+    "cjk": ("DroidSansFallback.ttf",
+            "https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/android-4.4_r1/data/fonts/DroidSansFallback.ttf",
+            "05d71b179ef97b82cf1bb91cef290c600a510f77f39b4964359e3ef88378c79d"),
+    "mono": ("DroidSansMono.ttf",
+             "https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/android-4.4_r1/data/fonts/DroidSansMono.ttf",
+             "12b552de765dc1265d64f9f5566649930dde4dba07da0251d9f92801e70a1047"),
+}
 FONTS = [
-    # table, source file, its path in noto-cjk, its SHA-256, output file, family name
-    ("TextZhHans.java", "NotoSansSC-VF.ttf", "Sans/Variable/TTF/Subset/NotoSansSC-VF.ttf",
-     "d68bafcb48a2707749396aa12bbbd833cb70401f3a9a689fd2902c7e0d295964", "RecipeLabCJKsc-Regular.ttf", "Recipe Lab CJK SC"),
-    ("TextZhHant.java", "NotoSansTC-VF.ttf", "Sans/Variable/TTF/Subset/NotoSansTC-VF.ttf",
-     "ac091cc8cd19e848202afc8fe6d3809b4526c8fdbdb4be82da20c4f785949591", "RecipeLabCJKtc-Regular.ttf", "Recipe Lab CJK TC"),
+    # table, output file, family name, source
+    ("TextZhHans.java", "RecipeLabCJKsc-Regular.ttf", "Recipe Lab CJK SC", "cjk"),
+    ("TextZhHant.java", "RecipeLabCJKtc-Regular.ttf", "Recipe Lab CJK TC", "cjk"),
+    ("TextEn.java", "RecipeLabMono-Regular.ttf", "Recipe Lab Mono", "mono"),
 ]
 # The camera's own font, Droid Sans (2048 units per em): line ascent / descent and the glyph bounding box. A TextView
 # sizes each line by these, so a font that reports more makes every line taller than it is in English.
@@ -50,14 +59,13 @@ def digest(path):
     return h.hexdigest()
 
 
-def source(source_dir, name, repo_path, expected):
+def source(source_dir, name, url, want):
     path = source_dir / name
     if not path.is_file():
         source_dir.mkdir(parents=True, exist_ok=True)
-        url = "https://raw.githubusercontent.com/notofonts/noto-cjk/%s/%s" % (COMMIT, repo_path)
         print("fetching %s" % url)
         urlretrieve(url, path)
-    if digest(path) != expected:
+    if digest(path) != want:
         raise SystemExit("%s does not match its pinned SHA-256" % path)
     return path
 
@@ -88,7 +96,6 @@ def build(src, output, family, chars):
     options.recalc_bounds = True   # the bounding box of what is left, not of the whole source
 
     font = subset.load_font(str(src), options)
-    instantiateVariableFont(font, {"wght": 400}, inplace=True)   # Android 2.3 reads static TrueType only
     worker = subset.Subsetter(options=options)
     worker.populate(text="".join(sorted(chars)))
     worker.subset(font)
@@ -101,7 +108,7 @@ def build(src, output, family, chars):
     os2.sTypoAscender, os2.sTypoDescender, os2.sTypoLineGap = ascent, descent, 0
     os2.usWinAscent, os2.usWinDescent = ascent, -descent
 
-    # a modified OFL font may not carry the upstream name
+    # a subset of Droid Sans Fallback must not claim the upstream family name
     postscript = family.replace(" ", "") + "-Regular"
     for name_id, value in {1: family, 2: "Regular", 3: family + " Regular", 4: family + " Regular", 6: postscript, 16: family, 17: "Regular"}.items():
         font["name"].setName(value, name_id, 3, 1, 0x409)
@@ -122,8 +129,11 @@ def main():
     args = parser.parse_args()
     OUTPUT.mkdir(parents=True, exist_ok=True)
     common = set(chr(c) for c in range(0x20, 0x7f)) | table_chars("TextEn.java")
-    for java, name, repo_path, expected, output, family in FONTS:
-        build(source(args.source_dir, name, repo_path, expected), output, family, common | table_chars(java))
+    sources = {}
+    for java, output, family, key in FONTS:
+        if key not in sources:
+            sources[key] = source(args.source_dir, *SOURCES[key])
+        build(sources[key], output, family, common | table_chars(java))
 
 
 if __name__ == "__main__":

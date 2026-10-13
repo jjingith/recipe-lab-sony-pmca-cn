@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- a value key, at rest: a key cap on the panel -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <solid android:color="#4DFFFFFF" />
-    <corners android:radius="4dp" />
+    <solid android:color="#2E74FF9A" />
+    <corners android:radius="2dp" />
 </shape>

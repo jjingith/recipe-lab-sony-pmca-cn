@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- the minimised recipe pill: a dark plate with an amber border, like a label on the body -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <solid android:color="#B3000000" />
-    <corners android:radius="12dp" />
+    <solid android:color="#E6080E09" />
+    <stroke android:width="1dp" android:color="#B3FFB23E" />
+    <corners android:radius="3dp" />
 </shape>

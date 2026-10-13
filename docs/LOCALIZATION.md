@@ -68,16 +68,19 @@ Renaming a recipe therefore renames its key: `LangTest` names the table that is 
 
 ## Fonts
 
-The camera's firmware font has no Chinese glyphs, so the APK carries two: Noto Sans CJK SC and TC (SIL Open Font
-License), each cut down to the characters its table uses plus printable ASCII and the English table's characters —
-about 105 KB each. One per script, so each gets its own glyph forms. Their line metrics are set to the camera
-font's, so a Chinese line is no taller than an English one. They live in `assets/fonts/` with their licence
-and provenance ([README.txt](../assets/fonts/README.txt)).
+The camera's firmware font has no Chinese glyphs, and the Cassette Futurism screen asks for a terminal face, so the
+APK carries one font per language, English included, all Apache-2.0. English is drawn in Droid Sans Mono, the
+monospace companion of the camera's own Droid Sans; the two Chinese tables in Droid Sans Fallback, its CJK companion,
+so a Chinese line sits in the same family as the Latin around it. Each is cut down to the characters its table uses
+plus printable ASCII and the other tables' characters (about 85 KB each for Chinese, 20 KB for the mono face). One
+per script, so each gets its own glyph forms. Their line metrics are set to the camera font's, so no line is taller
+than an English one in the camera's own font. They live in `assets/fonts/` with their licence and provenance
+([README.txt](../assets/fonts/README.txt)).
 
-`tools/subset-font.py` rebuilds both from the tables. It fetches the pinned sources once into `out/font-source/`
-(about 16 MB each, never committed) and needs `fonttools` (`python3 -m pip install fonttools`). `LangTest` reads each
-font's cmap and fails on any character its table uses that the font lacks, so a translation change without a font
-rebuild does not get past CI.
+`tools/subset-font.py` rebuilds all three from the tables. It fetches the two pinned sources once into
+`out/font-source/` (about 3.8 MB and 0.5 MB, never committed) and needs `fonttools` (`python3 -m pip install
+fonttools`). `LangTest` reads each font's cmap and fails on any character its table uses that the font lacks, so a
+translation change without a font rebuild does not get past CI.
 
 If a font cannot be loaded on the camera, the app falls back to the firmware font: the Chinese text is then boxes, but
 the app still opens and English still works.

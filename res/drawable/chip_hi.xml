@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- a value key holding the recipe's own value, not the camera's: an amber key -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <solid android:color="#4DFFFFFF" />
-    <stroke android:width="1.5dp" android:color="#FFF2B85C" />
-    <corners android:radius="4dp" />
+    <solid android:color="#33FFB23E" />
+    <stroke android:width="1.5dp" android:color="#FFFFB23E" />
+    <corners android:radius="2dp" />
 </shape>

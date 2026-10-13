@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- a value key under the focus: lit in inverse video, green behind and black in front -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <solid android:color="#FFF2B85C" />
-    <corners android:radius="4dp" />
+    <solid android:color="#FF74FF9A" />
+    <corners android:radius="2dp" />
 </shape>

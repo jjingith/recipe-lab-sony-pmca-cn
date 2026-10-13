@@ -1,32 +1,33 @@
-Recipe Lab bundled CJK fonts
-============================
+Recipe Lab bundled fonts
+========================
 
-Cut-down derivatives of Noto Sans CJK, holding only the glyphs the app's Chinese text uses
-(src/com/voxivoid/recipelab/TextZhHans.java and TextZhHant.java), plus printable ASCII and
-the English table's characters. Renamed as the SIL Open Font License asks of a modified font.
+Three cut-down fonts, one per language: English is drawn in Droid Sans Mono, the terminal
+face the green-screen UI is set in, and the two Chinese tables in Droid Sans Fallback, the
+CJK companion of Droid Sans, the font the camera's own interface uses. Each holds only the
+glyphs its table uses (src/com/lutlab/pmca/TextEn.java, TextZhHans.java, TextZhHant.java),
+plus printable ASCII and the other tables' characters, which still appear alongside it. A
+Chinese line sits in the same family as the Latin around it.
 
-Upstream:  https://github.com/notofonts/noto-cjk
-Commit:    f8d157532fbfaeda587e826d4cd5b21a49186f7c
-License:   SIL Open Font License 1.1 (OFL.txt, the upstream Sans/LICENSE)
+Upstream:  https://github.com/aosp-mirror/platform_frameworks_base (tag android-4.4_r1)
+  data/fonts/DroidSansFallback.ttf   (the Chinese fonts)
+    SHA-256: 05d71b179ef97b82cf1bb91cef290c600a510f77f39b4964359e3ef88378c79d
+  data/fonts/DroidSansMono.ttf       (the English font)
+    SHA-256: 12b552de765dc1265d64f9f5566649930dde4dba07da0251d9f92801e70a1047
+License:   Apache License 2.0 (LICENSE.txt)
 
-Sources (not committed, about 16 MB each):
-  Sans/Variable/TTF/Subset/NotoSansSC-VF.ttf
-    SHA-256 d68bafcb48a2707749396aa12bbbd833cb70401f3a9a689fd2902c7e0d295964
-  Sans/Variable/TTF/Subset/NotoSansTC-VF.ttf
-    SHA-256 ac091cc8cd19e848202afc8fe6d3809b4526c8fdbdb4be82da20c4f785949591
+Generated (static TrueType for Android 2.3):
+  RecipeLabMono-Regular.ttf    family "Recipe Lab Mono"    (English)
+  RecipeLabCJKsc-Regular.ttf   family "Recipe Lab CJK SC"  (Simplified Chinese)
+  RecipeLabCJKtc-Regular.ttf   family "Recipe Lab CJK TC"  (Traditional Chinese)
 
-Generated (Regular weight instanced, static TrueType for Android 2.3):
-  RecipeLabCJKsc-Regular.ttf   family "Recipe Lab CJK SC"
-  RecipeLabCJKtc-Regular.ttf   family "Recipe Lab CJK TC"
+No OpenType layout tables are kept (Android 2.3 shapes nothing), and the line metrics are set
+to the camera font's proportions (Droid Sans: ascent 1900, descent 500 per 2048), so no line
+is taller than an English one in the camera's own font.
 
-No OpenType layout tables are kept (Android 2.3 shapes nothing), and the line metrics are
-set to the camera font's proportions (Droid Sans: ascent 1900, descent 500 per 2048), so a
-Chinese line is no taller than an English one.
-
-Rebuild after any change to the Chinese text:
+Rebuild after any change to the text tables:
 
     python3 tools/subset-font.py
 
-It prints each output's size and SHA-256. The files are not byte-for-byte reproducible
-across fonttools versions; LangTest checks what matters, that each font maps every
-character its table uses.
+It prints each output's size and SHA-256. The files are not byte-for-byte reproducible across
+fonttools versions; LangTest checks what matters, that each font maps every character its table
+uses and reports no more line height than the camera's font.

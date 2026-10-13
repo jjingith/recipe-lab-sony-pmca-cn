@@ -54,7 +54,11 @@ src/com/voxivoid/recipelab/
                                every word on screen goes through — no Android, covered by test/ (docs/LOCALIZATION.md)
   TextEn.java                  the English text, key by key: the source, and what every other table falls back to
   TextZhHans.java, TextZhHant.java   Simplified and Traditional Chinese, plus the recipe / brand / style names
-  UiFont.java                  the typeface of each language: the camera's for English, assets/fonts for Chinese
+  UiFont.java                  the typeface of each language, one bundled font each: Droid Sans Mono for English,
+                               Droid Sans Fallback for the two Chinese tables (assets/fonts)
+  Theme.java                   the palette: the phosphor green / amber of the Cassette Futurism UI, and the only
+                               place a colour is written down
+  Crt.java                     the CRT scanline veil drawn over the full-screen overlays
   res/raw/ids.txt              every settings entry of 16 bytes or less, used by the snapshot/diff tool
   PickerView.java              Canvas-drawn brand browser (Favourites, Custom, then the brands; an empty group says how to fill it)
   KeyboardView.java            Canvas-drawn name editor: the field and NameEntry's keyboard grid
@@ -66,14 +70,13 @@ src/com/voxivoid/recipelab/
                                a hold is its key's icon labelled "(hold)", and Fn, where the body has it, sits before
                                MENU when both close the list ("Fn / MENU close")
   StarView.java                the star next to the recipe name when it is a favourite
-  SponsorLine.java             the small "Love this app? Leave a tip!" line, with a drawn heart, at the top of
-                               the live view on the Full and No keys panels (DevTools.sponsorLine, Ko-fi); the About page lists Ko-fi and GitHub Sponsors
   HintBar.java                 legend view under the panel (uses Legend)
   NativeBackup.java            JNI: read / write / attr / sync
 jni/jni.cpp                    Backup_read / Backup_write / Backup_sync_all via OpenMemories-Platform
 jni/platform/                  git submodule: ma1co/OpenMemories-Platform
 res/                           layout, shape drawables, launcher icon
-assets/fonts/                  the Chinese fonts: Noto Sans CJK SC / TC cut down to what the tables use (OFL)
+assets/fonts/                  one font per language, cut down to what its table uses (Apache-2.0):
+                               Droid Sans Mono for English, Droid Sans Fallback for Chinese
 test/com/voxivoid/recipelab/   JUnit tests for the camera-free classes (see Unit tests)
 test/com/sony/scalar/sysutil/  test doubles of the Sony classes KeyProbe reflects on
 build.sh                       the build: ndk-build, aapt, javac, d8, zipalign, apksigner
