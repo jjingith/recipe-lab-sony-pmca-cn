@@ -10,6 +10,12 @@
   <sub>基于 <a href="https://github.com/voxivoid/recipe-lab-sony-pmca">voxivoid/recipe-lab-sony-pmca</a> 最新代码（MIT）· 非官方分支</sub>
 </p>
 
+> **配套的电脑端工具：[Recipe Lab Studio](https://github.com/jjingith/recipe-lab-studio-sony-pmca)**
+> 在电脑上做配方，不用再在相机上一条条捏。它能把 `.cube` 文件、一组摄影作品，或「原片 + 成片」两张同机位照片
+> 拟合出风格相近的**自定义配方**，实时预览套用效果与残差，存进 PC 主库，再一键推送到相机存储卡的
+> `RECIPES\` 文件夹（写前备份 + 写后回读校验）。界面同样简 / 繁 / 英三语，**永久免费**。
+> 注意：它写入的是**自定义配方**，需要相机上装的是**含自定义配方功能**的版本（本分支或上游原版）；没有这个入口的旧版读不到。
+
 ---
 
 **目录**

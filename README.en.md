@@ -10,6 +10,14 @@
   <sub>Based on the latest code of <a href="https://github.com/voxivoid/recipe-lab-sony-pmca">voxivoid/recipe-lab-sony-pmca</a> (MIT) · unofficial branch</sub>
 </p>
 
+> **Companion desktop tool: [Recipe Lab Studio](https://github.com/jjingith/recipe-lab-studio-sony-pmca)**
+> Build recipes on a PC instead of dialling them in by hand on the camera. It fits a **custom recipe** from a
+> `.cube` LUT, a set of photographs, or a same-position "before + after" pair; previews the result and its
+> residual; keeps a PC master library; and pushes recipes to the camera card's `RECIPES\` folder (backing up
+> before the write, then reading the file back to verify it). Same three languages, **permanently free**.
+> Note: it writes **custom recipes**, so the camera must run a build that has the custom-recipe feature
+> (this branch or the upstream original) — older builds cannot see them.
+
 ---
 
 **Contents**
