@@ -168,10 +168,8 @@ python3 tools/subset-font.py
 
 ## 打赏
 
-如果这个小项目让你的相机更好用了一点，可以请我喝杯咖啡 ☕（支付宝扫码）：
+如果这个小项目让你的相机更好用了一点，欢迎到 [爱发电](https://afdian.com/a/jiajun2160) 请我喝咖啡 ☕。
 
-<p align="center">
-  <img src="docs/support-qr.png" width="340" alt="支付宝收款码">
-</p>
+打赏完全自愿，**不会获得额外功能或优先支持**——软件对所有用户一视同仁，永久免费。
 
 谢谢！

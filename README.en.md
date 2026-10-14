@@ -170,10 +170,8 @@ python3 tools/subset-font.py
 
 ## Tip
 
-If this made your camera a little nicer to use, you can buy me a coffee ☕:
+If this made your camera a little nicer to use, you can buy me a coffee on [Afdian](https://afdian.com/a/jiajun2160) ☕.
 
-<p align="center">
-  <img src="docs/support-qr.png" width="340" alt="Alipay tip QR code">
-</p>
+Tips are entirely voluntary and **do not buy extra features or priority support** — the software is the same for everyone, and permanently free.
 
 Thank you!
