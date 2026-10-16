@@ -31,8 +31,8 @@ class DevToolsTest {
     }
 
     @Test void theSampleRowNamesTheWholeTable() {
-        assertEquals("Shoot samples — 77 recipes", DevTools.rowLabel(DevTools.ROW_SAMPLES, false, 0));
-        assertEquals(77, Recipes.ALL.length, "the label counts the table, so the table is what it must count");
+        assertEquals("Shoot samples — 81 recipes", DevTools.rowLabel(DevTools.ROW_SAMPLES, false, 0));
+        assertEquals(81, Recipes.ALL.length, "the label counts the table, so the table is what it must count");
     }
 
     @Test void oneTurnOfTheMenuVisitsEveryRowItDefines() {
@@ -61,7 +61,7 @@ class DevToolsTest {
         assertEquals(DevTools.ROWS, DevTools.rows(DevTools.LEVEL_DEV));
         String[] labels = new String[DevTools.APP_ROWS];
         for (int r = 0; r < DevTools.APP_ROWS; r++) labels[r] = DevTools.appLabel(r);
-        assertEquals(Arrays.asList("Browse recipes", "New recipe", "Panel visibility", "Language", "Reset settings", "About", "Developer  >"), Arrays.asList(labels));
+        assertEquals(Arrays.asList("Browse recipes", "New recipe", "Panel visibility", "Language", "Reset settings", "Save a bug report", "About", "Developer  >"), Arrays.asList(labels));
         assertTrue(DevTools.appDetail(DevTools.APP_NEW).contains("current settings"), "the row says what it keeps");
         assertEquals(DevTools.APP_BROWSE, 0, "the menu opens on Browse, so a body without Fn is one press from the list");
     }
@@ -135,18 +135,14 @@ class DevToolsTest {
     // ---- About
     @Test void aboutShowsVersionCameraFirmwarePlatformAndSource() {
         String[][] a = DevTools.about("9.8.7", null, "3.21", "");
-        assertEquals(5, a.length, "the facts; the sponsor ask is the footer");
+        assertEquals(5, a.length, "the facts");
         assertEquals("version", a[0][0]); assertEquals("9.8.7", a[0][1]);
         assertEquals("camera", a[1][0]); assertEquals("unknown", a[1][1], "no model from the camera");
         assertEquals("firmware", a[2][0]); assertEquals("3.21", a[2][1]);
         assertEquals("platform", a[3][0]); assertEquals("unknown", a[3][1], "an empty platform string");
         assertEquals("source", a[4][0]);
         assertEquals("unknown", DevTools.about(null, null, null, null)[2][1], "no firmware from the camera");
-        String[] f = DevTools.aboutFooter();
-        assertEquals("Love this app? Leave a tip!", f[0], "the README's ask");
-        assertEquals("ko-fi.com/voxivoid", f[1], "Ko-fi first: no GitHub account needed");
-        assertEquals("github.com/sponsors/voxivoid", f[2]);
-        assertEquals("Love this app? Leave a tip!  ko-fi.com/voxivoid", DevTools.sponsorLine(), "the live view's line");
+        assertEquals(0, DevTools.aboutFooter().length, "this build carries no sponsor ask");
         assertEquals("ILCE-6000", DevTools.about(null, "ILCE-6000", null, "2.4")[1][1]);
     }
 

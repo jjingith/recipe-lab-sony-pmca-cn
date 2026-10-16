@@ -29,6 +29,7 @@ UNITS=(
   src/com/lutlab/pmca/Params.java
   src/com/lutlab/pmca/Favourites.java
   src/com/lutlab/pmca/CustomRecipes.java
+  src/com/lutlab/pmca/CardLog.java
   src/com/lutlab/pmca/RecipeFormat.java
   src/com/lutlab/pmca/RecipeFormats.java
   src/com/lutlab/pmca/RecipeFormatV1.java
