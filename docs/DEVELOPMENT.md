@@ -32,7 +32,7 @@ src/com/voxivoid/recipelab/
   MainActivity.java            UI state, key handling, the camera (CameraEx via reflection), store + sync
   Params.java                  the parameter rows: slot ids, store encodings, preview parameters, chip
                                navigation, HUD strings — pure functions, no Android, covered by test/
-  Recipes.java                 the 77-entry table (the factory look, FACTORY, first in Sony, then the 76 others), brands,
+  Recipes.java                 the 81-entry table (the factory look, FACTORY, first in Sony, then the 80 others), brands,
                                GROUP_START / GROUP_COUNT, list navigation
   Favourites.java              the favourites list: stored by name in the app's preferences, and how the browser
                                walks the Favourites and Custom groups — pure functions, no Android, covered by test/
@@ -130,7 +130,7 @@ The **developer menu** holds the tools that are not part of using the app:
 |---|---|
 | **Settings snapshot** / **Settings diff** | the snapshot / diff tool below; the row's name says which half is next |
 | **Read-only check — 26 slots** | the read-only check below: does this body flag any slot a recipe writes |
-| **Shoot samples — 77 recipes** | the sample run below |
+| **Shoot samples — 81 recipes** | the sample run below |
 | **Settle delay** | a value — the delay the sample run waits after applying a recipe; left / right step through 0.8 / 1.2 / 2.0 / 3.0 / 5.0 s in place (centre steps forward), kept in the app's preferences |
 | **Key logger** | every key event on screen, newest first, and appended to `keys.txt` in `getFilesDir()`: scan code, down / up, repeat count, Sony's logic code; the header is the model, the platform and what the probe found. Nothing else happens while it runs; **hold MENU** leaves |
 
@@ -188,7 +188,7 @@ One frame per recipe, in table order — the capture half of issue #17. The run 
    press / release, automated
 4. next recipe, until the table ends
 
-While it runs, a sticky line counts the frames (`Shooting 12 / 77 · Velvia — MENU stops`) and **every key is
+While it runs, a sticky line counts the frames (`Shooting 12 / 81 · Velvia — MENU stops`) and **every key is
 swallowed** so nothing walks the table underneath it; **MENU** stops the run. The run also stops in `onPause` — it
 cannot outlive the camera it shoots with. When it ends, the recipe the user was on is staged again.
 
@@ -196,7 +196,7 @@ The frames are identified by **order**: the camera names the files, and the run 
 `samples.txt` in `getFilesDir()`, one line per frame —
 
 ```
-# recipe-lab samples  ·  77 frames in recipe order  ·  settle 1200 ms  ·  frame|recipe|brand|values
+# recipe-lab samples  ·  81 frames in recipe order  ·  settle 1200 ms  ·  frame|recipe|brand|values
 01|FACTORY (ST)|Sony|Standard  0/0
 02|Sony PT (portrait)|Sony|Portrait  0/0
 ```
@@ -506,7 +506,7 @@ against a SHA-256 pinned in the script (`JUNIT_JAR=<path>` points it at a copy w
 
 | | |
 |---|---|
-| `RecipesTest` | the table itself — 77 entries (76 listed + the factory look, which navigation skips), group order, every value inside its row's range, kelvin in whole hundreds, sub-parameters that exist for the effect; labels, `summary()`, wrap-around navigation |
+| `RecipesTest` | the table itself — 81 entries (80 listed + the factory look, which navigation skips), group order, every value inside its row's range, kelvin in whole hundreds, sub-parameters that exist for the effect; labels, `summary()`, wrap-around navigation |
 | `ParamsCodecTest` | how the store encodes each row (DRO bytes, any Picture Profile reading as on, magenta-positive G-M, the quality pair, signed vs unsigned slots) and how it reads back |
 | `ParamsWritesTest` | which bytes ENTER writes for a recipe — golden lists for a few, and every recipe stored over a factory camera, then on top of each other, read back through the same decoder |
 | `ParamsPreviewTest` | the `Camera.Parameters` the live preview sets, recipe by recipe |
