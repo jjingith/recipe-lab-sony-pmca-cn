@@ -159,6 +159,11 @@ final class TextEn {
         { "menu_reset_detail", "Back to the camera's factory look" },
         { "menu_about", "About" },
         { "menu_about_detail", "Version, camera, platform" },
+        { "menu_report", "Save a bug report" },
+        { "menu_report_detail", "One file on the card to attach to an issue" },
+        { "report_saved", "Report saved as %1$s — connect the camera to a computer and attach that file to your issue" },
+        { "report_failed", "Report not saved: %1$s" },
+        { "report_need_card", "No memory card — insert one to save a report" },
         { "menu_dev", "Developer  >" },
         { "menu_dev_detail", "Settings snapshot, read-only check, samples, key logger" },
         { "panel_full", "Full" },
@@ -171,7 +176,6 @@ final class TextEn {
         { "about_firmware", "firmware" },
         { "about_platform", "platform" },
         { "about_source", "source" },
-        { "about_love", "Love this app? Leave a tip!" },
 
         // ---- the developer menu and the sample run
         { "dev_title", "DEV TOOLS" },
