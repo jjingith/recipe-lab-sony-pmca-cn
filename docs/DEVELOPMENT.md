@@ -27,8 +27,8 @@ see [CONTRIBUTING.md](CONTRIBUTING.md).
 ## Source layout
 
 ```
-AndroidManifest.xml            package com.voxivoid.recipelab
-src/com/voxivoid/recipelab/
+AndroidManifest.xml            package com.lutlab.pmca
+src/com/lutlab/pmca/
   MainActivity.java            UI state, key handling, the camera (CameraEx via reflection), store + sync
   Params.java                  the parameter rows: slot ids, store encodings, preview parameters, chip
                                navigation, HUD strings — pure functions, no Android, covered by test/
