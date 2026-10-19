@@ -15,6 +15,7 @@ final class Crt {
 
     /** one dark line every few pixels over {@code w} x {@code h}: the phosphor rows of a green-screen monitor */
     static void scanlines(Canvas c, float w, float h, float d) {
+        if (!Theme.crt()) return;                               // the XP looks are a flat window, not a tube
         VEIL.setColor(Theme.SCAN);
         float step = Math.max(2f, 3 * d), thick = Math.max(1f, d * 0.5f);
         for (float y = 0; y < h; y += step) c.drawRect(0, y, w, y + thick, VEIL);

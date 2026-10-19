@@ -17,17 +17,18 @@ import java.util.List;
  * memory card, A to Z); the rest are the brands.
  */
 public class PickerView extends View {
-    private static final int ACCENT = Theme.ACCENT, INK = Theme.INK, AMBER = Theme.AMBER;
+    private static int ACCENT = Theme.ACCENT, INK = Theme.INK, AMBER = Theme.AMBER;   // not final: restyle() refreshes them
 
     private final Paint bg = new Paint(Paint.ANTI_ALIAS_FLAG), edge = new Paint(Paint.ANTI_ALIAS_FLAG), sel = new Paint(Paint.ANTI_ALIAS_FLAG),
             head = new Paint(Paint.ANTI_ALIAS_FLAG), item = new Paint(Paint.ANTI_ALIAS_FLAG), small = new Paint(Paint.ANTI_ALIAS_FLAG), rule = new Paint(),
             track = new Paint(Paint.ANTI_ALIAS_FLAG), thumb = new Paint(Paint.ANTI_ALIAS_FLAG), tagBg = new Paint(Paint.ANTI_ALIAS_FLAG),
-            star = new Paint(Paint.ANTI_ALIAS_FLAG);
+            star = new Paint(Paint.ANTI_ALIAS_FLAG), band = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final RectF r = new RectF();
     private final float d;
     private final Legend legend;
     private Keys.Caps caps = Keys.Caps.UNKNOWN;
     private final Paint outline = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private int styled = -1;                                      // the Theme version these paints were set from
     private int selected = 0, column = 1, group = 0;              // column: 0 groups, 1 recipes · group: Favourites.GROUP or a brand
     private List<Integer> favs = new ArrayList<Integer>();
     private Library lib = new Library();
@@ -37,15 +38,29 @@ public class PickerView extends View {
         super(c, a);
         d = c.getResources().getDisplayMetrics().density;
         legend = new Legend(d);
+        edge.setStyle(Paint.Style.STROKE); edge.setStrokeWidth(d);
+        outline.setStyle(Paint.Style.STROKE); outline.setStrokeWidth(1.5f * d);
+        head.setTextSize(9 * d); head.setFakeBoldText(true);
+        item.setTextSize(13 * d);
+        small.setTextSize(10 * d);
+        restyle();
+    }
+
+    /** the palette: the short colour names and the paints captured at construction, refreshed when the theme changes */
+    private void restyle() {
+        ACCENT = Theme.ACCENT; INK = Theme.INK; AMBER = Theme.AMBER;
         bg.setColor(Theme.MODAL);
-        edge.setColor(Theme.EDGE); edge.setStyle(Paint.Style.STROKE); edge.setStrokeWidth(d);
+        edge.setColor(Theme.EDGE);
         sel.setColor(ACCENT);
-        outline.setColor(ACCENT); outline.setStyle(Paint.Style.STROKE); outline.setStrokeWidth(1.5f * d);
-        head.setColor(Theme.TEXT_FAINT); head.setTextSize(9 * d); head.setFakeBoldText(true);
-        item.setColor(Theme.TEXT); item.setTextSize(13 * d);
-        small.setColor(Theme.TEXT_FAINT); small.setTextSize(10 * d);
+        outline.setColor(ACCENT);
+        head.setColor(Theme.TEXT_FAINT);
+        item.setColor(Theme.TEXT);
+        small.setColor(Theme.TEXT_FAINT);
         rule.setColor(Theme.RULE);
         track.setColor(Theme.TRACK); thumb.setColor(Theme.THUMB);
+        band.setColor(Theme.CHASSIS);
+        legend.restyle();
+        styled = Theme.version();
     }
 
     /** what the key probe found; until it is set only the universal keys are named */
@@ -68,6 +83,7 @@ public class PickerView extends View {
 
     @Override
     protected void onDraw(Canvas c) {
+        if (styled != Theme.version()) restyle();
         float w = getWidth(), h = getHeight(), pad = 12 * d;
         c.drawRect(0, 0, w, h, bg);
 
@@ -80,6 +96,7 @@ public class PickerView extends View {
         float legTop = h - pad - legend.height(legend.lines(w - 2 * pad, hints)) + 2 * d;   // the legend, on as many lines as it needs
         float top = pad + 12 * d, bottom = legTop - 6 * d;      // header / footer reserved
         float sbW = 4 * d;                                      // scrollbar width
+        if (!Theme.crt()) c.drawRect(0, 0, w, top + 3 * d, band);   // an XP column-header band, over the two labels
         head.setColor(column == 0 ? AMBER : Theme.TEXT_FAINT);
         c.drawText(Lang.t("picker_brand"), pad, pad + 7 * d, head);
         head.setColor(column == 1 ? AMBER : Theme.TEXT_FAINT);

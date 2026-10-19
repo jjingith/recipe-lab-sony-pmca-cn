@@ -16,7 +16,7 @@ import android.view.View;
  * two arrows, drawn rather than typed because the camera font has no arrow glyphs. Title on top, icon legend at the bottom.
  */
 public class MenuView extends View {
-    private static final int ACCENT = Theme.ACCENT, INK = Theme.INK, AMBER = Theme.AMBER;
+    private static int ACCENT = Theme.ACCENT, INK = Theme.INK, AMBER = Theme.AMBER;   // not final: restyle() refreshes them
 
     private final Paint bg = new Paint(Paint.ANTI_ALIAS_FLAG), head = new Paint(Paint.ANTI_ALIAS_FLAG),
             item = new Paint(Paint.ANTI_ALIAS_FLAG), small = new Paint(Paint.ANTI_ALIAS_FLAG), row = new Paint(Paint.ANTI_ALIAS_FLAG),
@@ -28,6 +28,7 @@ public class MenuView extends View {
     private final RectF box = new RectF();
     private final Legend legend;
     private final float d;
+    private int styled = -1;                                       // the Theme version these paints were set from
     private String title = "";
     private String[] labels = new String[0], details = new String[0], values = new String[0];
     private Typeface face = Typeface.DEFAULT;
@@ -42,16 +43,26 @@ public class MenuView extends View {
         super(c, a);
         d = c.getResources().getDisplayMetrics().density;
         legend = new Legend(d);
-        bg.setColor(Theme.MODAL);
-        head.setColor(AMBER); head.setTextSize(9 * d); head.setFakeBoldText(true);
+        head.setTextSize(9 * d); head.setFakeBoldText(true);
         item.setTextSize(13 * d); item.setFakeBoldText(true);
         small.setTextSize(10 * d);
-        key.setTextSize(10 * d); key.setFakeBoldText(true); key.setColor(AMBER);
+        key.setTextSize(10 * d); key.setFakeBoldText(true);
         value.setTextSize(13 * d); value.setFakeBoldText(true); value.setTextAlign(Paint.Align.CENTER);
         arrow.setStyle(Paint.Style.FILL);
         glyph.setStyle(Paint.Style.STROKE); glyph.setStrokeWidth(1.5f * d); glyph.setStrokeCap(Paint.Cap.ROUND);
+        restyle();
+    }
+
+    /** the palette: the short colour names and the paints captured at construction, refreshed when the theme changes */
+    private void restyle() {
+        ACCENT = Theme.ACCENT; INK = Theme.INK; AMBER = Theme.AMBER;
+        bg.setColor(Theme.MODAL);
+        head.setColor(Theme.AMBER);
+        key.setColor(Theme.AMBER);
         rule.setColor(Theme.RULE);
         track.setColor(Theme.TRACK); thumb.setColor(Theme.THUMB);
+        legend.restyle();
+        styled = Theme.version();
     }
 
     /** the display language's typeface ({@link UiFont}) */
@@ -98,11 +109,15 @@ public class MenuView extends View {
 
     @Override
     protected void onDraw(Canvas c) {
+        if (styled != Theme.version()) restyle();
         float w = getWidth(), h = getHeight(), pad = 16 * d;
         c.drawRect(0, 0, w, h, bg);
-        arrow.setColor(ACCENT);
+        boolean xp = !Theme.crt();
+        if (xp) Chrome.titleBar(c, w, pad + 8 * d, d);              // the XP title band, with the title written on it
+        arrow.setColor(xp ? Theme.TITLE_INK : ACCENT);
         c.drawCircle(pad + 2 * d, pad + 3 * d, 2.5f * d, arrow);       // the lamp beside the label
-        c.drawText(title.toUpperCase(), pad + 8 * d, pad + 7 * d, head);
+        head.setColor(xp ? Theme.TITLE_INK : Theme.AMBER);
+        c.drawText(title.toUpperCase(), pad + 8 * d, xp ? pad + 3 * d : pad + 7 * d, head);
         float legTop = h - pad - legend.height(legend.lines(w - 2 * pad, hints)) + 2 * d;   // the legend, on as many lines as it needs
         float top = pad + 14 * d, bottom = legTop - 6 * d;          // header / footer reserved, as in the brand list
         c.drawLine(pad, top, w - pad, top, rule);
@@ -255,6 +270,14 @@ public class MenuView extends View {
                 }
                 glyph.setStyle(Paint.Style.STROKE);
                 c.drawLine(cx - s * 0.4f, cy + s * 0.35f, cx + s * 0.4f, cy + s * 0.35f, glyph);
+                return;
+            case DevTools.IC_THEME:                                  // a window: a filled title band over a body
+                box.set(cx - s, cy - s * 0.75f, cx + s, cy + s * 0.75f);
+                c.drawRoundRect(box, 2 * d, 2 * d, glyph);
+                glyph.setStyle(Paint.Style.FILL);
+                box.set(cx - s, cy - s * 0.75f, cx + s, cy - s * 0.2f);
+                c.drawRect(box, glyph);
+                glyph.setStyle(Paint.Style.STROKE);
                 return;
         }
     }

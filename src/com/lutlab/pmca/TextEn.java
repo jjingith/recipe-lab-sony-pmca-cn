@@ -155,6 +155,11 @@ final class TextEn {
         { "menu_panel_detail", "What stays over the live image" },
         { "menu_language", "Language" },
         { "menu_language_detail", "Menus and messages — Auto follows the camera" },
+        { "menu_theme", "Theme" },
+        { "menu_theme_detail", "The colours of the interface" },
+        { "theme_crt", "Cassette futurism" },
+        { "theme_xp_light", "Windows XP (light)" },
+        { "theme_xp_dark", "Windows XP (dark)" },
         { "menu_reset", "Reset settings" },
         { "menu_reset_detail", "Back to the camera's factory look" },
         { "menu_about", "About" },
@@ -171,7 +176,6 @@ final class TextEn {
         { "about_firmware", "firmware" },
         { "about_platform", "platform" },
         { "about_source", "source" },
-        { "about_love", "Love this app? Leave a tip!" },
 
         // ---- the developer menu and the sample run
         { "dev_title", "DEV TOOLS" },

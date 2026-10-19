@@ -17,12 +17,13 @@ import java.util.List;
  * overflow the box are drawn smaller rather than cut.
  */
 public class PromptView extends View {
-    private static final int ACCENT = Theme.ACCENT, INK = Theme.INK;
+    private static int ACCENT = Theme.ACCENT, INK = Theme.INK;   // not final: restyle() refreshes them
 
     private final Paint bg = new Paint(Paint.ANTI_ALIAS_FLAG), edge = new Paint(Paint.ANTI_ALIAS_FLAG), title = new Paint(Paint.ANTI_ALIAS_FLAG),
             body = new Paint(Paint.ANTI_ALIAS_FLAG), opt = new Paint(Paint.ANTI_ALIAS_FLAG), pill = new Paint(Paint.ANTI_ALIAS_FLAG), note = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final RectF r = new RectF();
     private final float d;
+    private int styled = -1;                                     // the Theme version these paints were set from
     private String titleText = "", bodyText = "", noteText = null;
     private String[] options = new String[0];
     private int selected = 0;
@@ -32,12 +33,23 @@ public class PromptView extends View {
     public PromptView(Context c, AttributeSet a) {
         super(c, a);
         d = c.getResources().getDisplayMetrics().density;
-        bg.setColor(Theme.MODAL);
-        edge.setColor(Theme.EDGE); edge.setStyle(Paint.Style.STROKE); edge.setStrokeWidth(d);
-        title.setColor(Theme.AMBER); title.setTextSize(15 * d); title.setFakeBoldText(true);
-        body.setColor(Theme.TEXT_DIM); body.setTextSize(12 * d);
+        edge.setStyle(Paint.Style.STROKE); edge.setStrokeWidth(d);
+        title.setTextSize(15 * d); title.setFakeBoldText(true);
+        body.setTextSize(12 * d);
         opt.setTextSize(13 * d); opt.setFakeBoldText(true); opt.setTextAlign(Paint.Align.CENTER);
-        note.setColor(Theme.TEXT_FAINT); note.setTextSize(10 * d);
+        note.setTextSize(10 * d);
+        restyle();
+    }
+
+    /** the palette: the short colour names and the paints captured at construction, refreshed when the theme changes */
+    private void restyle() {
+        ACCENT = Theme.ACCENT; INK = Theme.INK;
+        bg.setColor(Theme.MODAL);
+        edge.setColor(Theme.EDGE);
+        title.setColor(Theme.AMBER);
+        body.setColor(Theme.TEXT_DIM);
+        note.setColor(Theme.TEXT_FAINT);
+        styled = Theme.version();
     }
 
     /** the display language's typeface ({@link UiFont}) */
@@ -92,8 +104,12 @@ public class PromptView extends View {
 
     @Override
     protected void onDraw(Canvas c) {
+        if (styled != Theme.version()) restyle();
         float w = getWidth(), h = getHeight(), pad = 16 * d;
         r.set(0, 0, w, h); c.drawRect(r, bg); c.drawRect(r, edge);
+        boolean xp = !Theme.crt();
+        if (xp) Chrome.titleBar(c, w, 14 * d + titleStep() * titleLines.size(), d);   // the XP dialog title band
+        title.setColor(xp ? Theme.TITLE_INK : Theme.AMBER);
         float y = 14 * d + 15 * d;
         for (String l : titleLines) { c.drawText(l, pad, y, title); y += titleStep(); }
         y -= titleStep() - 18 * d;                              // the gap under the title, as before

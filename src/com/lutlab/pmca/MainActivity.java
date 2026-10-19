@@ -3,6 +3,7 @@ package com.lutlab.pmca;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
@@ -50,7 +51,8 @@ import static com.lutlab.pmca.Params.*;
  * {@link Lang}, in the language the app menu picked; this class only applies it and its font ({@link UiFont}).
  */
 public class MainActivity extends Activity implements SurfaceHolder.Callback {
-    private static final int ACCENT = Theme.ACCENT, INK = Theme.INK, WHITE = Theme.TEXT, DIM = Theme.TEXT_FAINT, AMBER = Theme.AMBER;
+    // not final: a theme switch rewrites the palette, and applyTheme() refreshes these short names with it
+    private static int ACCENT = Theme.ACCENT, INK = Theme.INK, WHITE = Theme.TEXT, DIM = Theme.TEXT_FAINT, AMBER = Theme.AMBER;
 
     private View panel;
     private PickerView picker;
@@ -82,6 +84,11 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
     private int menuLevel = DevTools.LEVEL_APP, menuPage = PAGE_ROWS;   // which menu, and whether it shows rows or a read-only page
     private int menuSel = 0, settleIdx = DevTools.SETTLE_DEFAULT;   // menu: highlighted row · developer menu: chosen settle delay
     private int langChoice = Lang.AUTO;                         // the Language row: Lang.AUTO or a language
+    private int themeChoice = Theme.DEFAULT;                    // the Theme row: Theme.CRT, XP_LIGHT or XP_DARK
+    // the chrome the panel wears, rebuilt from the palette on every theme switch: the res/drawable shapes are the CRT
+    // look written in XML and cannot follow one, so Chrome builds them in Java. One view each — a Drawable shared
+    // between views would take the bounds of whichever view was measured last, so the chips build theirs per draw.
+    private GradientDrawable bgPanel, bgPill, bgToast, bgTag, bgBadgeOK, bgBadgeWarn, bgBadgeEdited;
     private static final int PAGE_ROWS = 0, PAGE_ABOUT = 1;
     private Keys.Caps caps = Keys.Caps.UNKNOWN;                 // the shortcut keys this body reports (KeyProbe)
     private HintBar hints;
@@ -129,8 +136,10 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
     @Override
     protected void onCreate(Bundle b) {
         super.onCreate(b);
-        setContentView(R.layout.main);
         prefs = getPreferences(MODE_PRIVATE);
+        themeChoice = Theme.parseChoice(prefs.getString("theme", null));
+        Theme.apply(themeChoice);                                // before setContentView: the views read the palette as they build
+        setContentView(R.layout.main);
         recipe = Math.max(0, Math.min(Recipes.ALL.length - 1, prefs.getInt("recipe", 0)));
         favStored = prefs.getString("favourites", "");
         favs = Favourites.decode(favStored, library);
@@ -157,6 +166,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
         buildChips();
         actionsRow = (LinearLayout) findViewById(R.id.actions);
         buildActions();
+        applyTheme();                                            // after the views exist: it colours the XML ones and the panel's chrome
         applyLanguage();
         caps = KeyProbe.caps();
         hints.setCaps(caps); picker.setCaps(caps);
@@ -206,6 +216,35 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
         Typeface tf = UiFont.of(this, Lang.current());
         UiFont.apply(findViewById(android.R.id.content), tf);
         picker.setTypeface(tf); prompt.setTypeface(tf); menu.setTypeface(tf); hints.setTypeface(tf); keyboard.setTypeface(tf);
+    }
+
+    /**
+     * The theme the Theme row resolves to: the palette, the panel's own colours, and the chrome the XML cannot carry.
+     * main.xml's textColors and shapes are the CRT frame the app was written with; every colour a theme moves this way
+     * is applied from {@link Theme} instead. The custom views follow on their own: they check {@link Theme#version()} as
+     * they draw and restyle, which is why nothing here reaches for them. The caller follows with render(), so the panel's
+     * chips and badges — whose colours MainActivity owns — are redrawn in it too.
+     */
+    private void applyTheme() {
+        Theme.apply(themeChoice);
+        ACCENT = Theme.ACCENT; INK = Theme.INK; WHITE = Theme.TEXT; DIM = Theme.TEXT_FAINT; AMBER = Theme.AMBER;
+        bgPanel = Chrome.panel(dp(1)); bgPill = Chrome.pill(dp(1)); bgToast = Chrome.toast(dp(1)); bgTag = Chrome.chip(dp(1));
+        bgBadgeOK = Chrome.badge(dp(1), Theme.BADGE_OK);
+        bgBadgeWarn = Chrome.badge(dp(1), Theme.BADGE_WARN);
+        bgBadgeEdited = Chrome.badge(dp(1), Theme.BADGE_EDITED);
+        panel.setBackgroundDrawable(bgPanel);
+        mini.setBackgroundDrawable(bgPill);
+        toast.setBackgroundDrawable(bgToast);
+        tag.setBackgroundDrawable(bgTag);
+        badge.setBackgroundDrawable(bgBadgeOK);
+        editedBadge.setBackgroundDrawable(bgBadgeEdited);
+        name.setTextColor(WHITE);
+        count.setTextColor(Theme.TEXT_DIM);
+        nameOriginal.setTextColor(DIM);
+        meta.setTextColor(Theme.TEXT_DIM);
+        mini.setTextColor(WHITE);
+        toast.setTextColor(WHITE);
+        editedBadge.setTextColor(Theme.BADGE_EDITED);
     }
 
     @Override
@@ -559,7 +598,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
             switch (menuSel) {
                 case DevTools.APP_BROWSE: closeMenu(); browse(); break;
                 case DevTools.APP_NEW: closeMenu(); openName(NAME_NEW); break;   // the camera's current settings, kept as a recipe
-                case DevTools.APP_PANEL: case DevTools.APP_LANG: stepMenuValue(+1); break;
+                case DevTools.APP_PANEL: case DevTools.APP_LANG: case DevTools.APP_THEME: stepMenuValue(+1); break;
                 case DevTools.APP_RESET: closeMenu(); askReset(); break;
                 case DevTools.APP_ABOUT: menuPage = PAGE_ABOUT; renderMenu(); break;
                 case DevTools.APP_DEV: menuLevel = DevTools.LEVEL_DEV; menuSel = 0; renderMenu(); break;
@@ -583,6 +622,10 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
             langChoice = Lang.nextChoice(langChoice, dir);
             prefs.edit().putString("language", Lang.choiceCode(langChoice)).commit();
             applyLanguage();                                     // the menu redraws in it straight away, the panel under it too
+        } else if (menuLevel == DevTools.LEVEL_APP && menuSel == DevTools.APP_THEME) {
+            themeChoice = Theme.nextChoice(themeChoice, dir);
+            prefs.edit().putString("theme", Theme.choiceCode(themeChoice)).commit();
+            applyTheme();                                        // the palette, in the menu and in the panel under it
         } else if (menuLevel == DevTools.LEVEL_DEV && menuSel == DevTools.ROW_SETTLE) {
             settleIdx = DevTools.nextSettle(settleIdx, dir);
             prefs.edit().putInt("settle", settleIdx).commit();
@@ -1015,8 +1058,8 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
             tag.setVisibility(edit[R_PE] != 0 ? View.VISIBLE : View.GONE);
             fav.setVisibility(favs.contains(recipe) ? View.VISIBLE : View.GONE);
             // two questions, two badges: does the camera have what you see (ACTIVE / PREVIEW), and is it the recipe as it was (EDITED)
-            if (dirty) { badge.setText(Lang.t("state_preview")); badge.setTextColor(Theme.BADGE_WARN); badge.setBackgroundResource(R.drawable.badge_warn); }
-            else { badge.setText(Lang.t("state_active")); badge.setTextColor(Theme.BADGE_OK); badge.setBackgroundResource(R.drawable.badge_ok); }
+            if (dirty) { badge.setText(Lang.t("state_preview")); badge.setTextColor(Theme.BADGE_WARN); badge.setBackgroundDrawable(bgBadgeWarn); }
+            else { badge.setText(Lang.t("state_active")); badge.setTextColor(Theme.BADGE_OK); badge.setBackgroundDrawable(bgBadgeOK); }
             editedBadge.setText(Lang.t("state_edited"));
             editedBadge.setVisibility(edited() ? View.VISIBLE : View.GONE);
             String m = Params.metaLine(edit, previewOk ? null : previewErr);   // warnings only: the values are on the chips
@@ -1030,13 +1073,13 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
                 boolean on = onActions && i == actionSel;
                 actionBtn[i].setVisibility(View.VISIBLE);
                 actionBtn[i].setText(CustomRecipes.editLabel(acts[i]));
-                actionBtn[i].setBackgroundResource(on ? R.drawable.chip_sel : R.drawable.chip);
+                actionBtn[i].setBackgroundDrawable(on ? Chrome.chipSel(dp(1)) : Chrome.chip(dp(1)));
                 actionBtn[i].setTextColor(on ? INK : WHITE);
             }
             for (int i : ORDER) {
                 chip[i].setVisibility(rowVisible(i) ? View.VISIBLE : View.GONE);
                 boolean sel = i == row && !onActions, ch = rowDirty(i), foc = sel && focus;
-                chip[i].setBackgroundResource(foc ? R.drawable.chip_sel : sel ? R.drawable.chip_hi : R.drawable.chip);
+                chip[i].setBackgroundDrawable(foc ? Chrome.chipSel(dp(1)) : sel ? Chrome.chipHi(dp(1)) : Chrome.chip(dp(1)));
                 chipLabel[i].setText(Params.rowName(i));
                 chipLabel[i].setTextColor(foc ? INK : sel ? ACCENT : DIM);
                 chipValue[i].setTextColor(foc ? INK : ch ? ACCENT : WHITE);

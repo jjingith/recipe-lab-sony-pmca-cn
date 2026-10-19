@@ -25,6 +25,11 @@ public class Legend {
 
     public Legend(float density) {
         d = density;
+        restyle();
+    }
+
+    /** the palette the legend draws in; a theme switch calls it again, as every owner does in its draw */
+    void restyle() {
         fill.setColor(Theme.TEXT_DIM); fill.setStyle(Paint.Style.FILL);
         stroke.setColor(Theme.TEXT_DIM); stroke.setStyle(Paint.Style.STROKE);
         text.setColor(Theme.TEXT_FAINT);

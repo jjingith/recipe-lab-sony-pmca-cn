@@ -11,6 +11,7 @@ public class HintBar extends View {
     public static final int RECIPE = Keys.H_RECIPE, CHIPS = Keys.H_CHIPS, EDIT = Keys.H_EDIT;
 
     private final Legend legend;
+    private int styled = -1;                                     // the Theme version the legend was set from
     private int mode = RECIPE;
     private Keys.Caps caps = Keys.Caps.UNKNOWN;
 
@@ -35,6 +36,7 @@ public class HintBar extends View {
 
     @Override
     protected void onDraw(Canvas c) {
+        if (styled != Theme.version()) { legend.restyle(); styled = Theme.version(); }
         legend.drawWrapped(c, 0, 0, getWidth(), Keys.hints(mode, caps));
     }
 }

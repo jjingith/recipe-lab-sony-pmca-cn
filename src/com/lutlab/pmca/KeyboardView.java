@@ -16,7 +16,7 @@ import android.view.View;
  * has no arrow glyphs.
  */
 public class KeyboardView extends View {
-    private static final int ACCENT = Theme.ACCENT, INK = Theme.INK, AMBER = Theme.AMBER;
+    private static int ACCENT = Theme.ACCENT, INK = Theme.INK, AMBER = Theme.AMBER;   // not final: restyle() refreshes them
 
     private final Paint bg = new Paint(Paint.ANTI_ALIAS_FLAG), head = new Paint(Paint.ANTI_ALIAS_FLAG), field = new Paint(Paint.ANTI_ALIAS_FLAG),
             box = new Paint(Paint.ANTI_ALIAS_FLAG), err = new Paint(Paint.ANTI_ALIAS_FLAG), cell = new Paint(Paint.ANTI_ALIAS_FLAG),
@@ -25,6 +25,7 @@ public class KeyboardView extends View {
     private final Path path = new Path();
     private final Legend legend;
     private final float d;
+    private int styled = -1;                                     // the Theme version these paints were set from
     private String title = "";
     private NameEntry entry = NameEntry.blank("");
     private Keys.Hints hints = Keys.hints(Keys.H_NAME, Keys.Caps.UNKNOWN);
@@ -33,14 +34,25 @@ public class KeyboardView extends View {
         super(c, a);
         d = c.getResources().getDisplayMetrics().density;
         legend = new Legend(d);
-        bg.setColor(Theme.MODAL);
-        head.setColor(AMBER); head.setTextSize(9 * d); head.setFakeBoldText(true);
+        head.setTextSize(9 * d); head.setFakeBoldText(true);
         field.setTextSize(17 * d); field.setFakeBoldText(true);
-        box.setColor(ACCENT); box.setStyle(Paint.Style.STROKE); box.setStrokeWidth(1.5f * d);
-        err.setColor(Theme.WARN_TEXT); err.setTextSize(10 * d);
+        box.setStyle(Paint.Style.STROKE); box.setStrokeWidth(1.5f * d);
+        err.setTextSize(10 * d);
         label.setTextSize(13 * d); label.setFakeBoldText(true); label.setTextAlign(Paint.Align.CENTER);
         glyph.setStyle(Paint.Style.STROKE); glyph.setStrokeWidth(1.5f * d);
+        restyle();
+    }
+
+    /** the palette: the short colour names and the paints captured at construction, refreshed when the theme changes */
+    private void restyle() {
+        ACCENT = Theme.ACCENT; INK = Theme.INK; AMBER = Theme.AMBER;
+        bg.setColor(Theme.MODAL);
+        head.setColor(Theme.AMBER);
+        box.setColor(ACCENT);
+        err.setColor(Theme.WARN_TEXT);
         rule.setColor(Theme.RULE);
+        legend.restyle();
+        styled = Theme.version();
     }
 
     /** the display language's typeface ({@link UiFont}) */
@@ -58,19 +70,26 @@ public class KeyboardView extends View {
 
     @Override
     protected void onDraw(Canvas c) {
+        if (styled != Theme.version()) restyle();
         float w = getWidth(), h = getHeight(), pad = 16 * d;
+        boolean xp = !Theme.crt();
         float legTop = h - pad - legend.height(legend.lines(w - 2 * pad, hints)) + 2 * d;   // the legend, on as many lines as it needs
         c.drawRect(0, 0, w, h, bg);
+        if (xp) Chrome.titleBar(c, w, pad + 8 * d, d);              // the XP title band, with the title written on it
         box.setStyle(Paint.Style.FILL);
+        box.setColor(xp ? Theme.TITLE_INK : ACCENT);
         c.drawCircle(pad + 2 * d, pad + 3 * d, 2.5f * d, box);          // the lamp beside the label
         box.setStyle(Paint.Style.STROKE);
-        c.drawText(title.toUpperCase(), pad + 8 * d, pad + 7 * d, head);
+        box.setColor(ACCENT);
+        head.setColor(xp ? Theme.TITLE_INK : Theme.AMBER);
+        c.drawText(title.toUpperCase(), pad + 8 * d, xp ? pad + 3 * d : pad + 7 * d, head);
         float top = pad + 14 * d;
         c.drawLine(pad, top, w - pad, top, rule);
 
         // ---- the field
         float fy = top + 10 * d, fh = 32 * d;
-        r.set(pad, fy, w - pad, fy + fh); c.drawRect(r, box);
+        r.set(pad, fy, w - pad, fy + fh);
+        if (xp) Chrome.sunken(c, r, d); else c.drawRect(r, box);
         String text = entry.shown();
         field.setColor(entry.isPlaceholder() ? Theme.TEXT_FAINT : Theme.TEXT);
         float base = fy + fh / 2 - (field.ascent() + field.descent()) / 2, tx = pad + 10 * d;

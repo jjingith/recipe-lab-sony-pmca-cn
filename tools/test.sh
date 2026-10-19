@@ -38,6 +38,7 @@ UNITS=(
   src/com/lutlab/pmca/Keys.java
   src/com/lutlab/pmca/KeyProbe.java
   src/com/lutlab/pmca/Lang.java
+  src/com/lutlab/pmca/Theme.java
   src/com/lutlab/pmca/TextEn.java
   src/com/lutlab/pmca/TextZhHans.java
   src/com/lutlab/pmca/TextZhHant.java
