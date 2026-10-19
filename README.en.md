@@ -22,6 +22,7 @@
 
 **Contents**
 
+- [Notice](#notice)
 - [What it is](#what-it-is)
 - [What this branch adds](#what-this-branch-adds)
 - [Screenshots](#screenshots)
@@ -35,6 +36,16 @@
 - [Credits](#credits)
 - [Licence](#licence)
 - [Tip](#tip)
+
+---
+
+## Notice
+
+- **[jjingith/recipe-lab-sony-pmca-cn](https://github.com/jjingith/recipe-lab-sony-pmca-cn) is the only original and maintained repository for this branch.** The Cassette Futurism theme, the three-language UI, the 81 recipes and the build scripts all live here, and every future update is published here only.
+- **This branch is a Chinese localisation and derivative of [voxivoid/recipe-lab-sony-pmca](https://github.com/voxivoid/recipe-lab-sony-pmca) (MIT License).** The upstream author's and contributors' copyright notices and credits are kept in full — see [Credits](#credits) and [Licence](#licence).
+- **Forking, modifying and redistributing are welcome** (MIT allows it), but please keep a link to this repository, the author credit and the copyright notice. Do not strip the GitHub `forked from` label, and do not present your copy as the original.
+- **An unmodified copy under another account is only a mirror.** Official builds and Releases are published here only; same-named repositories under other accounts that drop the attribution are not mine and do not represent my updates or support.
+- **The project is permanently free.** There is no paid edition, no unlock and no licensing channel. Apart from the [Tip](#tip) link at the end of this README, I neither accept nor authorise any paid download, resale or reshipping.
 
 ---
 
