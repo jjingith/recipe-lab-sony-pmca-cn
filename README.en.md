@@ -150,7 +150,7 @@ python3 tools/subset-font.py
 | | Upstream | This branch |
 | --- | --- | --- |
 | Package | `com.voxivoid.recipelab` | `com.lutlab.pmca` |
-| Version | 1.9.0 | **1.7.0** |
+| Version | 1.9.0 | **1.9.0** (upstream code followed) |
 | Recipes | 77 | **81** (+4 filters) |
 | Theme | native dark | **Cassette Futurism green screen** |
 | Fonts | system | **bundled Droid Sans Mono / Droid Sans Fallback** |

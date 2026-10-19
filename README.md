@@ -148,7 +148,7 @@ python3 tools/subset-font.py
 | | 上游原版 | 本分支 |
 | --- | --- | --- |
 | 包名 | `com.voxivoid.recipelab` | `com.lutlab.pmca` |
-| 版本 | 1.9.0 | **1.7.0** |
+| 版本 | 1.9.0 | **1.9.0**（已跟进上游代码） |
 | 配方数 | 77 | **81**（+4 滤镜） |
 | 界面主题 | 原生深色 | **卡带未来主义绿屏** |
 | 字体 | 系统字体 | **Droid Sans Mono / Droid Sans Fallback（内置）** |
