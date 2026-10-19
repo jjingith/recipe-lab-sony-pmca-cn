@@ -82,6 +82,25 @@ them by copying the files. See [Custom recipes](../README.md#custom-recipes).
 They live on the card, not in the app: removing the app keeps them, **formatting the card deletes them**, and a
 different card has its own.
 
+## Can I shoot inside the app?
+
+You can, but it is not what the app is for. The shutter works inside Recipe Lab only so you can try a recipe on a
+real frame while you scroll through them. Recipe Lab does not replace the camera's own shooting: it writes the recipe
+into the camera's settings, then you leave the app (**MENU**) and shoot with the camera's normal modes — P, A, S, M,
+video, silent shutter, drive modes, whatever your body offers. The look stays with you.
+
+So the in-app view is a preview, and it can differ from the camera's own (some bodies show Movie mode differently, for
+example). Bugs that appear only while shooting inside the app matter less than anything that goes wrong in the stored
+settings, and features such as other shutter modes belong to the camera, not to this app.
+
+## Why do some recipes have identical settings?
+
+Because the camera has only a handful of knobs to turn: a Creative Style, contrast, saturation, sharpness, white
+balance and a few more. Two films that differ in grain, tone curve or halation can land on the same values once
+squeezed into those, and then they render the same JPEG. Examples are Acros, Ilford FP4 and Ilford Delta 100, or Sony
+NT and Canon Faithful. They are deliberate aliases: the name is there so you can find the look you know, not because
+the app does anything extra behind it. Nothing else differentiates them — Recipe Lab never processes an image.
+
 ## Can it use LUTs, like JPEG.CAM does?
 
 No, and not by accident. Recipe Lab never processes an image — it picks camera settings and gets out of the way,
@@ -111,7 +130,7 @@ not the same thing.
 
 ## Are there sample photos of each recipe?
 
-Yes — **[on the website](https://recipelabstudio.pages.dev/recipes)**, each next to Standard; how they were shot is in
+Yes — **[on the website](https://recipelab.io/recipes)**, each next to Standard; how they were shot is in
 [SAMPLES.md](SAMPLES.md). All 77 recipes on one subject, in one light, at one fixed exposure (1/30, f/4.5, ISO 250),
 straight out of the camera and not edited, downscaled to 900 px so the page stays light. Nothing that touches colour
 was done to them.
@@ -120,6 +139,17 @@ The scene has no skin tone, foliage or sky, so it judges the portrait-leaning re
 live preview is still the better sample — turn the wheel and the image on the screen is what the camera will write.
 
 ## Something went wrong
+
+**To report a bug, save a report file first.** It holds everything needed to find the problem, so you attach one
+file instead of answering a long list of questions:
+
+1. Right after the problem happens, open Recipe Lab.
+2. Hold **MENU** until the app menu opens, choose **Save a bug report** and press the centre button.
+3. Connect the camera to your computer with its USB cable, or put the memory card in a card reader. If the card does
+   not show up, set `MENU → Setup → USB Connection` to *Mass Storage* on the camera and plug it in again.
+4. Open the **RECIPLAB** folder on the card and attach **REPORT.TXT** to a
+   [bug report](https://github.com/voxivoid/recipe-lab-sony-pmca/issues/new?template=bug_report.yml).
+
 
 The [Troubleshooting table](../README.md#troubleshooting) covers the common ones. Install and USB problems belong to
 [Sony-PMCA-RE](https://github.com/ma1co/Sony-PMCA-RE/issues), which is what puts apps on the camera; anything about

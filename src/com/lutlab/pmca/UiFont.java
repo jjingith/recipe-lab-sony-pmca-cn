@@ -9,10 +9,11 @@ import android.widget.TextView;
 
 /**
  * The typeface each display language ({@link Lang}) is drawn in, and how large its text sits. The camera's firmware
- * font carries only Latin, and the interface is a green-screen terminal: English is drawn in a bundled Droid Sans Mono
- * and Chinese in the bundled Droid Sans Fallback, both cut down to what the tables use by tools/subset-font.py — one
- * file per script so each gets its own glyph forms. A font that will not load falls back to the camera's: the text is
- * then boxes, but the app still opens.
+ * font carries only Latin, and the interface is a green-screen terminal: English and Vietnamese (Latin with diacritics)
+ * are drawn in a bundled Droid Sans Mono, Chinese, Japanese and Korean in the bundled Droid Sans Fallback — the AOSP font
+ * the camera's own Droid Sans pairs with — both cut down to what the tables use by tools/subset-font.py, one file per
+ * script so each gets its own glyph forms. A font that will not load falls back to the camera's: the text is then boxes,
+ * but the app still opens.
  *
  * {@link #setScale} makes every language's text a little smaller or larger than its layout asks for. A CJK glyph fills
  * its em box where a Latin one leaves room above and below, so the same point size looks bigger in Chinese; the views
@@ -21,7 +22,14 @@ import android.widget.TextView;
 final class UiFont {
     private UiFont() {}
 
-    private static final String[] ASSET = { "fonts/RecipeLabMono-Regular.ttf", "fonts/RecipeLabCJKsc-Regular.ttf", "fonts/RecipeLabCJKtc-Regular.ttf" };
+    private static final String[] ASSET = {
+        "fonts/RecipeLabMono-Regular.ttf",     // English
+        "fonts/RecipeLabCJKsc-Regular.ttf",    // 简体中文
+        "fonts/RecipeLabCJKtc-Regular.ttf",    // 繁體中文
+        "fonts/RecipeLabCJKjp-Regular.ttf",    // 日本語
+        "fonts/RecipeLabCJKkr-Regular.ttf",    // 한국어
+        "fonts/RecipeLabMono-Regular.ttf",     // Tiếng Việt: Latin with diacritics, which Droid Sans Mono draws
+    };
     private static final Typeface[] LOADED = new Typeface[Lang.COUNT];
     private static float scale = 1f;
 

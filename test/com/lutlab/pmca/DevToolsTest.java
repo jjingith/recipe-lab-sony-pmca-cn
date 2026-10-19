@@ -61,7 +61,7 @@ class DevToolsTest {
         assertEquals(DevTools.ROWS, DevTools.rows(DevTools.LEVEL_DEV));
         String[] labels = new String[DevTools.APP_ROWS];
         for (int r = 0; r < DevTools.APP_ROWS; r++) labels[r] = DevTools.appLabel(r);
-        assertEquals(Arrays.asList("Browse recipes", "New recipe", "Panel visibility", "Language", "Theme", "Reset settings", "About", "Developer  >"), Arrays.asList(labels));
+        assertEquals(Arrays.asList("Browse recipes", "New recipe", "Panel visibility", "Language", "Theme", "Reset settings", "Save a bug report", "About", "Developer  >"), Arrays.asList(labels));
         assertTrue(DevTools.appDetail(DevTools.APP_NEW).contains("current settings"), "the row says what it keeps");
         assertEquals(DevTools.APP_BROWSE, 0, "the menu opens on Browse, so a body without Fn is one press from the list");
     }
@@ -99,6 +99,9 @@ class DevToolsTest {
         assertEquals("English", DevTools.appValue(DevTools.APP_LANG, Params.OV_FULL, Lang.EN));
         assertEquals("简体中文", DevTools.appValue(DevTools.APP_LANG, Params.OV_FULL, Lang.ZH_HANS));
         assertEquals("繁體中文", DevTools.appValue(DevTools.APP_LANG, Params.OV_FULL, Lang.ZH_HANT));
+        assertEquals("日本語", DevTools.appValue(DevTools.APP_LANG, Params.OV_FULL, Lang.JA));
+        assertEquals("한국어", DevTools.appValue(DevTools.APP_LANG, Params.OV_FULL, Lang.KO));
+        assertEquals("Tiếng Việt", DevTools.appValue(DevTools.APP_LANG, Params.OV_FULL, Lang.VI));
     }
 
     @Test void leftRightWalkThePanelStatesAndWrap() {

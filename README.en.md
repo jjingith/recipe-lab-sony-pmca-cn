@@ -6,8 +6,8 @@
 
 <p align="center">
   A <b>Cassette Futurism</b> green-screen theme for the Sony PlayMemories camera app<br>
-  <sub>81 recipes · live preview · write a look straight into the camera · English / 简体 / 繁體</sub><br>
-  <sub>Based on the latest code of <a href="https://github.com/voxivoid/recipe-lab-sony-pmca">voxivoid/recipe-lab-sony-pmca</a> (MIT) · unofficial branch</sub>
+  <sub>81 recipes · live preview · write a look straight into the camera · English / 简体 / 繁體 / 日本語 / 한국어 / Tiếng Việt</sub><br>
+  <sub>Based on the latest code of <a href="https://github.com/voxivoid/recipe-lab-sony-pmca">voxivoid/recipe-lab-sony-pmca</a> (GPL-3.0) · unofficial branch</sub>
 </p>
 
 > **Companion desktop tool: [Recipe Lab Studio](https://github.com/jjingith/recipe-lab-studio-sony-pmca)**
@@ -41,11 +41,11 @@
 
 ## Notice
 
-- **[jjingith/recipe-lab-sony-pmca-cn](https://github.com/jjingith/recipe-lab-sony-pmca-cn) is the only original and maintained repository for this branch.** The Cassette Futurism theme, the three-language UI, the 81 recipes and the build scripts all live here, and every future update is published here only.
-- **This branch is a Chinese localisation and derivative of [voxivoid/recipe-lab-sony-pmca](https://github.com/voxivoid/recipe-lab-sony-pmca) (MIT License).** The upstream author's and contributors' copyright notices and credits are kept in full — see [Credits](#credits) and [Licence](#licence).
-- **Forking, modifying and redistributing are welcome** (MIT allows it), but please keep a link to this repository, the author credit and the copyright notice. Do not strip the GitHub `forked from` label, and do not present your copy as the original.
+- **[jjingith/recipe-lab-sony-pmca-cn](https://github.com/jjingith/recipe-lab-sony-pmca-cn) is the only original and maintained repository for this branch.** The Cassette Futurism theme, the six-language UI, the 81 recipes and the build scripts all live here, and every future update is published here only.
+- **This branch is a Chinese localisation and derivative of [voxivoid/recipe-lab-sony-pmca](https://github.com/voxivoid/recipe-lab-sony-pmca) (GPL-3.0).** The upstream author's and contributors' copyright notices and credits are kept in full — see [Credits](#credits) and [Licence](#licence). Upstream was MIT up to and including v1.7.0 and moved to GPL-3.0 with a 7(b) attribution term from v1.8.0 on.
+- **Forking, modifying and redistributing are welcome** (GPL-3.0 allows it), but please keep a link to this repository, the upstream attribution and the copyright notice. Do not strip the GitHub `forked from` label, and do not present your copy as the original.
 - **An unmodified copy under another account is only a mirror.** Official builds and Releases are published here only; same-named repositories under other accounts that drop the attribution are not mine and do not represent my updates or support.
-- **The project is permanently free.** There is no paid edition, no unlock and no licensing channel. Apart from the [Tip](#tip) link at the end of this README, I neither accept nor authorise any paid download, resale or reshipping.
+- **The project is permanently free and open source under GPL-3.0.** Anyone may use, modify and redistribute it under GPL-3.0 (which also permits distribution for a fee). I do not offer a paid edition, an unlock or a licensing channel, and I charge nothing for this project apart from the [Tip](#tip) link at the end of this README.
 
 ---
 
@@ -56,7 +56,7 @@ An app that runs **on the Sony cameras that support PlayMemories Camera Apps (PM
 - **No firmware, no jailbreak**: it only writes settings you could change by hand in the camera menus
 - **Fully reversible**: TRASH in the app restores the factory colour
 - **Live preview**: turn the wheel and watch the frame change before you commit
-- **Three languages**: English / Simplified / Traditional Chinese, switchable in the app menu; `Auto` follows the camera's locale
+- **Six languages**: English / Simplified / Traditional Chinese / Japanese / Korean / Vietnamese, switchable in the app menu; `Auto` follows the camera's locale
 
 ## What this branch adds
 
@@ -150,11 +150,11 @@ python3 tools/subset-font.py
 | | Upstream | This branch |
 | --- | --- | --- |
 | Package | `com.voxivoid.recipelab` | `com.lutlab.pmca` |
-| Version | 1.6.2 | **1.6.3** |
+| Version | 1.9.0 | **1.7.0** |
 | Recipes | 77 | **81** (+4 filters) |
 | Theme | native dark | **Cassette Futurism green screen** |
 | Fonts | system | **bundled Droid Sans Mono / Droid Sans Fallback** |
-| Languages | English | **English / Simplified / Traditional Chinese** |
+| Languages | English / Simplified / Traditional Chinese / Japanese / Korean / Vietnamese | **the same, re-localised with Sony's official Chinese menu terms** |
 
 > The package name differs, so this build installs **side by side** with the original without replacing it.
 
@@ -173,7 +173,8 @@ python3 tools/subset-font.py
 
 ## Licence
 
-- **MIT License**, inherited from the original project — see [LICENSE](LICENSE)
+- **GNU GPL-3.0**, following upstream — see [LICENSE](LICENSE). Upstream was MIT up to and including v1.7.0 and moved to GPL-3.0 from v1.8.0 on.
+- Under upstream's additional GPL-3.0 term **7(b)**, any copy or modified version must keep the attribution **“Based on Recipe Lab by André Domingues”** in its source notices and, where there is an interactive interface, show it in the Appropriate Legal Notices. This branch complies.
 - The bundled fonts are subsets of Droid Sans Mono / Droid Sans Fallback, **Apache License 2.0** — provenance in [assets/fonts/README.txt](assets/fonts/README.txt)
 - The original English README is kept at [docs/UPSTREAM-README.md](docs/UPSTREAM-README.md)
 

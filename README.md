@@ -6,8 +6,8 @@
 
 <p align="center">
   <b>卡带未来主义（Cassette Futurism）</b>界面 · 直接跑在索尼相机上的胶片配方应用<br>
-  <sub>81 种配方 · 实时预览 · 一键写入相机 · 完整三语（英 / 简 / 繁）</sub><br>
-  <sub>基于 <a href="https://github.com/voxivoid/recipe-lab-sony-pmca">voxivoid/recipe-lab-sony-pmca</a> 最新代码（MIT）· 非官方分支</sub>
+  <sub>81 种配方 · 实时预览 · 一键写入相机 · 完整六语（英 / 简 / 繁 / 日 / 韩 / 越）</sub><br>
+  <sub>基于 <a href="https://github.com/voxivoid/recipe-lab-sony-pmca">voxivoid/recipe-lab-sony-pmca</a> 最新代码（GPL-3.0）· 非官方分支</sub>
 </p>
 
 > **配套的电脑端工具：[Recipe Lab Studio](https://github.com/jjingith/recipe-lab-studio-sony-pmca)**
@@ -39,11 +39,11 @@
 
 ## 声明
 
-- **本仓库 [jjingith/recipe-lab-sony-pmca-cn](https://github.com/jjingith/recipe-lab-sony-pmca-cn) 是本分支唯一的原创与维护仓库。** 卡带未来主义主题、三语界面、81 种配方与全部构建脚本都在这里维护，后续更新只在此发布。
-- **本分支基于 [voxivoid/recipe-lab-sony-pmca](https://github.com/voxivoid/recipe-lab-sony-pmca)（MIT License）汉化与二次开发**，上游作者与贡献者的版权与署名完整保留，见[致谢](#致谢)与[许可](#许可)。
-- **欢迎 fork、修改与再分发**（MIT 允许），但请保留本仓库链接、作者署名与版权声明：不要移除 GitHub 上的 `forked from` 标识，也不要把自己的副本描述成「原创」并抹去来源。
+- **本仓库 [jjingith/recipe-lab-sony-pmca-cn](https://github.com/jjingith/recipe-lab-sony-pmca-cn) 是本分支唯一的原创与维护仓库。** 卡带未来主义主题、六语界面、81 种配方与全部构建脚本都在这里维护，后续更新只在此发布。
+- **本分支基于 [voxivoid/recipe-lab-sony-pmca](https://github.com/voxivoid/recipe-lab-sony-pmca)（GPL-3.0）汉化与二次开发**，上游作者与贡献者的版权与署名完整保留，见[致谢](#致谢)与[许可](#许可)。上游在 v1.7.0（含）之前以 MIT 发布，自 v1.8.0 起改为 GPL-3.0 并附带 GPL 7(b) 署名条款。
+- **欢迎 fork、修改与再分发**（GPL-3.0 允许），但请保留本仓库链接、上游署名与版权声明：不要移除 GitHub 上的 `forked from` 标识，也不要把自己的副本描述成「原创」并抹去来源。
 - **未经修改的同名副本只是镜像。** 正式版本与 Releases 只在本仓库发布；其他账号下不保留署名的同名仓库与本人无关，也不代表本人的后续更新与技术支持。
-- **项目永久免费**，没有收费版、解锁版或授权渠道。除本 README 末尾的[打赏](#打赏)入口外，本人不接受也不授权任何付费下载、代购或转售。
+- **项目永久免费，并以 GPL-3.0 开源**：任何人都可以按 GPL-3.0 自由使用、修改与再分发（GPL 亦允许有偿分发）。本人自己不提供收费版、解锁版或付费授权渠道；除本 README 末尾的[打赏](#打赏)入口外，不对本项目收取任何费用。
 
 ---
 
@@ -54,7 +54,7 @@
 - **不碰固件、不越狱**：只写入你本来也能在相机菜单里手动修改的设置项
 - **完全可逆**：应用内按 TRASH 键即可恢复出厂色彩
 - **实时预览**：拨动拨轮即可看到画面变化，满意了再写入
-- **三语界面**：English / 简体中文 / 繁體中文，可在应用菜单里切换，`Auto` 会跟随相机语言
+- **六语界面**：English / 简体中文 / 繁體中文 / 日本語 / 한국어 / Tiếng Việt，可在应用菜单里切换，`Auto` 会跟随相机语言
 
 ## 本分支做了什么
 
@@ -148,11 +148,11 @@ python3 tools/subset-font.py
 | | 上游原版 | 本分支 |
 | --- | --- | --- |
 | 包名 | `com.voxivoid.recipelab` | `com.lutlab.pmca` |
-| 版本 | 1.6.2 | **1.6.3** |
+| 版本 | 1.9.0 | **1.7.0** |
 | 配方数 | 77 | **81**（+4 滤镜） |
 | 界面主题 | 原生深色 | **卡带未来主义绿屏** |
 | 字体 | 系统字体 | **Droid Sans Mono / Droid Sans Fallback（内置）** |
-| 语言 | 英文 | **英 / 简 / 繁 三语** |
+| 语言 | 英 / 简 / 繁 / 日 / 韩 / 越 | **同上，并采用索尼官方中文菜单用语重新汉化** |
 
 > 因为包名不同，本版可与原版**并存安装**，互不覆盖。
 
@@ -171,7 +171,8 @@ python3 tools/subset-font.py
 
 ## 许可
 
-- 本项目沿用原项目 **MIT License**，见 [LICENSE](LICENSE)
+- 本项目遵循上游，以 **GNU GPL-3.0** 授权，见 [LICENSE](LICENSE)。上游在 v1.7.0（含）之前以 MIT 发布，自 v1.8.0 起改为 GPL-3.0。
+- 依上游 GPL-3.0 的附加条款 7(b)：任何副本或修改版本都必须在其源码声明中保留署名 **“Based on Recipe Lab by André Domingues”**；若带有交互式界面，还须在 Appropriate Legal Notices 中展示该署名。本分支遵守此条款。
 - 内置字体为 Droid Sans Mono / Droid Sans Fallback 子集，**Apache License 2.0**，来源见 [assets/fonts/README.txt](assets/fonts/README.txt)
 - 上游原版完整说明（英文）保留在 [docs/UPSTREAM-README.md](docs/UPSTREAM-README.md)
 

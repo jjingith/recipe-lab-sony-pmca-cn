@@ -14,7 +14,8 @@ body:
         **A report that it failed is as useful as one that it worked.** Please file it either way.
 
         Put your camera's name after `compat: ` in the title, e.g. `compat: A5100`. The questions below follow the
-        order you will do things in, so keep the camera at hand while you fill them in.
+        order you will do things in, so keep the camera at hand while you fill them in. Near the end you will save
+        a report file in the app and attach it: that one file answers most of what we would otherwise ask.
   - type: input
     id: camera
     attributes:
@@ -34,9 +35,8 @@ body:
     attributes:
       label: Recipe Lab version
       description: >-
-        The number of the release you downloaded, from the
-        [releases page](https://github.com/voxivoid/recipe-lab-sony-pmca/releases). The `RecipeLab.apk` link in the
-        README always serves the newest one. For any other build, give the name it came with.
+        In the app, hold MENU → **About**. If it did not install, the number of the release you downloaded from the
+        [releases page](https://github.com/voxivoid/recipe-lab-sony-pmca/releases).
       placeholder: "1.3.1"
     validations: { required: true }
   - type: dropdown
@@ -67,6 +67,13 @@ body:
         - "No — the installer failed"
         - "No — the camera has no Application menu"
     validations: { required: true }
+  - type: textarea
+    id: installer
+    attributes:
+      label: Installer output
+      description: >-
+        Only if it did not install. The app never ran, so it has no log: paste everything the installer printed
+        (PMCA-GUI's log pane, or the console of pmca-console.py), or attach a screenshot of it.
   - type: dropdown
     id: tweak
     attributes:
@@ -182,11 +189,39 @@ body:
     attributes:
       label: Key logger output
       description: >-
-        Optional, and the most useful thing for key problems. Hold MENU → Developer → Key logger, then press each
-        button you have once — especially any that did nothing above. Copy the top line (camera, platform, keys) and
-        the lines it shows, or attach a photo of the screen. Hold MENU to leave it.
+        Optional, only if a button did nothing or the wrong thing. Hold MENU → Developer → **Key logger**, press each
+        of those buttons once, then hold MENU to leave. What it saw goes into the report file above by itself; you
+        can also copy what the screen shows here.
       placeholder: "KEY LOGGER · ILCE-5100 · 2.7 — has DELETE PLAY MOVIE · lacks FN AEL C1 — down 103 UP · repeat 0"
-      render: text
+  - type: textarea
+    id: logfile
+    attributes:
+      label: Report file
+      description: |
+        When you have tried everything above:
+
+        1. Open Recipe Lab, hold **MENU** until the app menu opens, choose **Save a bug report** and press the centre
+           button. The screen says *Report saved*.
+        2. Connect the camera to your computer with its USB cable, or put the memory card in a card reader. (Nothing
+           shows up? On the camera, set MENU → Setup → **USB Connection** to **Mass Storage**.)
+        3. Open the **RECIPLAB** folder on the card and drag **REPORT.TXT** into this box.
+
+        No *Save a bug report* in the menu means your Recipe Lab is older: leave this empty.
+  - type: textarea
+    id: diff
+    attributes:
+      label: A setting that did not change (optional)
+      description: |
+        Only if a setting did not end up the way the recipe shows. This tells us where your camera keeps it:
+
+        1. In Recipe Lab, hold MENU → **Developer** → **Settings snapshot**.
+        2. Press MENU to leave the app. In the camera's own menu, change only that one setting to what the recipe
+           should have set.
+        3. Open Recipe Lab again, hold MENU → **Developer** → **Settings diff**.
+        4. Save the bug report again (above) and attach the new REPORT.TXT.
+
+        Then write here which setting you changed, and to what.
+      placeholder: "Creative Style → B/W"
   - type: textarea
     id: notes
     attributes:

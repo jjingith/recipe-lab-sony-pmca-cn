@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Rebuild the three fonts the APK bundles, from the text tables that use them.
+"""Rebuild the fonts the APK bundles, from the text tables that use them.
 
-The camera's firmware font has no Chinese glyphs, so the app carries its own: Droid Sans Fallback — the AOSP font
-Droid Sans pairs with, so a Chinese line sits in the same family as the camera's own UI — cut down to the characters
-their tables (src/.../TextZhHans.java, TextZhHant.java) actually use, plus printable ASCII and the English table's
-characters, which still appear on a Chinese screen (recipe names, codes, error text). One file per script, so each
-gets its own glyph forms. The English interface is drawn in Droid Sans Mono, the terminal face the green-screen look
-is written in, cut down the same way. Run it after any change to a translation; LangTest fails a character a font
-lacks.
+The camera's firmware font has no Chinese, Japanese or Hangul glyphs, so the app carries its own: Droid Sans Fallback —
+the AOSP font Droid Sans pairs with, so a CJK line sits in the same family as the camera's own UI — cut down to the
+characters their tables (src/.../TextZhHans.java, TextZhHant.java, TextJa.java, TextKo.java) actually use, plus printable
+ASCII and the English table's characters, which still appear on a translated screen (recipe names, codes, error text). One
+file per script, so each gets its own glyph forms. English and Vietnamese are drawn in Droid Sans Mono, the terminal face
+the green-screen look is written in — Vietnamese is Latin with diacritics, which Droid Sans Mono carries — cut down the
+same way. Run it after any change to a translation; LangTest fails a character a font lacks.
 
     python3 tools/subset-font.py              # the sources are fetched once into out/font-source/
     python3 tools/subset-font.py --source-dir <dir>
@@ -40,10 +40,12 @@ SOURCES = {
              "12b552de765dc1265d64f9f5566649930dde4dba07da0251d9f92801e70a1047"),
 }
 FONTS = [
-    # table, output file, family name, source
-    ("TextZhHans.java", "RecipeLabCJKsc-Regular.ttf", "Recipe Lab CJK SC", "cjk"),
-    ("TextZhHant.java", "RecipeLabCJKtc-Regular.ttf", "Recipe Lab CJK TC", "cjk"),
-    ("TextEn.java", "RecipeLabMono-Regular.ttf", "Recipe Lab Mono", "mono"),
+    # tables, output file, family name, source
+    (["TextZhHans.java"], "RecipeLabCJKsc-Regular.ttf", "Recipe Lab CJK SC", "cjk"),
+    (["TextZhHant.java"], "RecipeLabCJKtc-Regular.ttf", "Recipe Lab CJK TC", "cjk"),
+    (["TextJa.java"], "RecipeLabCJKjp-Regular.ttf", "Recipe Lab CJK JP", "cjk"),
+    (["TextKo.java"], "RecipeLabCJKkr-Regular.ttf", "Recipe Lab CJK KR", "cjk"),
+    (["TextEn.java", "TextVi.java"], "RecipeLabMono-Regular.ttf", "Recipe Lab Mono", "mono"),
 ]
 # The camera's own font, Droid Sans (2048 units per em): line ascent / descent and the glyph bounding box. A TextView
 # sizes each line by these, so a font that reports more makes every line taller than it is in English.
@@ -100,7 +102,7 @@ def build(src, output, family, chars):
     worker.populate(text="".join(sorted(chars)))
     worker.subset(font)
 
-    # line metrics in the camera font's proportions, so a Chinese line is as tall as an English one
+    # line metrics in the camera font's proportions, so a CJK line is as tall as an English one
     upm = font["head"].unitsPerEm
     ascent, descent = round(CAMERA_ASCENT * upm / CAMERA_UPM), round(CAMERA_DESCENT * upm / CAMERA_UPM)
     font["hhea"].ascent, font["hhea"].descent, font["hhea"].lineGap = ascent, descent, 0
@@ -130,10 +132,13 @@ def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
     common = set(chr(c) for c in range(0x20, 0x7f)) | table_chars("TextEn.java")
     sources = {}
-    for java, output, family, key in FONTS:
+    for tables, output, family, key in FONTS:
         if key not in sources:
             sources[key] = source(args.source_dir, *SOURCES[key])
-        build(sources[key], output, family, common | table_chars(java))
+        chars = set(common)
+        for java in tables:
+            chars |= table_chars(java)
+        build(sources[key], output, family, chars)
 
 
 if __name__ == "__main__":

@@ -29,6 +29,7 @@ UNITS=(
   src/com/lutlab/pmca/Params.java
   src/com/lutlab/pmca/Favourites.java
   src/com/lutlab/pmca/CustomRecipes.java
+  src/com/lutlab/pmca/CardLog.java
   src/com/lutlab/pmca/RecipeFormat.java
   src/com/lutlab/pmca/RecipeFormats.java
   src/com/lutlab/pmca/RecipeFormatV1.java
@@ -42,6 +43,9 @@ UNITS=(
   src/com/lutlab/pmca/TextEn.java
   src/com/lutlab/pmca/TextZhHans.java
   src/com/lutlab/pmca/TextZhHant.java
+  src/com/lutlab/pmca/TextJa.java
+  src/com/lutlab/pmca/TextKo.java
+  src/com/lutlab/pmca/TextVi.java
 )
 
 mkdir -p out/test
